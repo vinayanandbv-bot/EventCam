@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shared Event Album</title>
-  <link rel="stylesheet" href="styles.css?v=3">
+  <link rel="stylesheet" href="styles.css?v=4">
 </head>
 
 <body>
@@ -220,23 +220,6 @@
         cameraStream = await navigator.mediaDevices.getUserMedia(constraints);
         videoEl.srcObject = cameraStream;
 
-        // Apply subtle hardware zoom if supported by the camera device
-        try {
-          const track = cameraStream.getVideoTracks()[0];
-          const capabilities = track.getCapabilities();
-          if (capabilities.zoom) {
-            const minZoom = capabilities.zoom.min || 1;
-            const maxZoom = capabilities.zoom.max || 1;
-            if (maxZoom > minZoom) {
-              const targetZoom = Math.min(maxZoom, minZoom + (maxZoom - minZoom) * 0.15); // zoom in slightly
-              await track.applyConstraints({
-                advanced: [{ zoom: targetZoom }]
-              });
-            }
-          }
-        } catch (zoomErr) {
-          console.warn('Hardware zoom not supported on this track:', zoomErr);
-        }
 
         // Mirror front camera feed (for selfie mode)
         if (cameraFacingMode === 'user') {
