@@ -90,6 +90,8 @@ header p {
 .screen {
   display: none;
   flex-direction: column;
+  align-items: center;
+  width: 100%;
   flex-grow: 1;
   animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -104,6 +106,8 @@ header p {
   flex-direction: column;
   gap: 1.25rem;
   margin: auto 0;
+  width: 100%;
+  max-width: 450px;
 }
 
 .menu-card {
@@ -179,6 +183,8 @@ header p {
   background-color: #000;
   border-radius: 1.25rem;
   overflow: hidden;
+  width: 100%;
+  max-width: 450px;
   aspect-ratio: 3 / 4;
   border: 1px solid var(--glass-border);
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
@@ -371,6 +377,8 @@ header p {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
+  width: 100%;
+  max-width: 450px;
 }
 
 .back-link {
@@ -395,6 +403,8 @@ header p {
   grid-template-columns: repeat(3, 1fr);
   gap: 0.5rem;
   padding-bottom: 2rem;
+  width: 100%;
+  max-width: 450px;
 }
 
 .gallery-item {
