@@ -26,6 +26,7 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  align-items: center; /* Center the app container horizontally */
   overflow-x: hidden;
   position: relative;
 }

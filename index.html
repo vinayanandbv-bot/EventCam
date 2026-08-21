@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shared Event Album</title>
-  <link rel="stylesheet" href="styles.css?v=2">
+  <link rel="stylesheet" href="styles.css?v=3">
 </head>
 
 <body>
@@ -286,8 +286,8 @@
       // Reset transform if altered
       ctx.setTransform(1, 0, 0, 1, 0, 0);
 
-      // Convert to JPEG format with high quality compression
-      capturedImageBase64 = canvasEl.toDataURL('image/jpeg', 0.95);
+      // Convert to JPEG format with balanced quality/size compression
+      capturedImageBase64 = canvasEl.toDataURL('image/jpeg', 0.90);
 
       // Show in preview modal
       previewImg.src = capturedImageBase64;
