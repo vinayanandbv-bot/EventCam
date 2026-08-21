@@ -566,3 +566,69 @@ header p {
     padding-top: 3rem;
   }
 }
+
+/* Responsive landscape mobile constraints (max height 500px) */
+@media (orientation: landscape) and (max-height: 500px) {
+  .app-container {
+    padding-top: 0.5rem;
+  }
+  
+  header {
+    padding: 0.5rem 0 1rem 0;
+  }
+  
+  /* Split the camera screen horizontally in landscape */
+  #screen-camera {
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center;
+    gap: 1.5rem;
+    width: 100%;
+    margin: auto 0;
+  }
+  
+  .camera-view-container {
+    max-width: 55vh !important; /* Constrain video height to fit landscape screen height */
+    height: 70vh;
+  }
+  
+  .camera-bottom-controls {
+    margin-top: 0 !important;
+    padding: 0 !important;
+    width: auto !important;
+  }
+  
+  .shutter-btn {
+    width: 64px;
+    height: 64px;
+  }
+  
+  /* Split preview modal into side-by-side layout */
+  .modal-content {
+    flex-direction: row !important;
+    max-width: 90vw !important;
+    height: 85vh;
+  }
+  
+  .preview-image-container {
+    width: 60% !important;
+    height: 100% !important;
+    aspect-ratio: auto !important;
+  }
+  
+  .modal-actions {
+    width: 40% !important;
+    flex-direction: column !important;
+    justify-content: center;
+    gap: 1rem;
+    border-top: none !important;
+    border-left: 1px solid var(--glass-border);
+    padding: 1rem !important;
+  }
+  
+  .btn {
+    width: 100%;
+    flex: none !important;
+  }
+}
+

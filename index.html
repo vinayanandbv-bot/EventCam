@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shared Event Album</title>
-  <link rel="stylesheet" href="styles.css?v=4">
+  <link rel="stylesheet" href="styles.css?v=5">
 </head>
 
 <body>
@@ -220,6 +220,21 @@
         cameraStream = await navigator.mediaDevices.getUserMedia(constraints);
         videoEl.srcObject = cameraStream;
 
+        // Dynamically adjust the camera box aspect ratio to match the camera stream sensor exactly
+        videoEl.onloadedmetadata = () => {
+          if (videoEl.videoWidth && videoEl.videoHeight) {
+            const aspect = videoEl.videoWidth / videoEl.videoHeight;
+            document.querySelector('.camera-view-container').style.aspectRatio = aspect;
+          }
+        };
+
+        // Listen for resize/orientation changes to keep aspect ratio aligned
+        window.addEventListener('resize', () => {
+          if (currentScreen === 'camera' && videoEl && videoEl.videoWidth) {
+            const aspect = videoEl.videoWidth / videoEl.videoHeight;
+            document.querySelector('.camera-view-container').style.aspectRatio = aspect;
+          }
+        });
 
         // Mirror front camera feed (for selfie mode)
         if (cameraFacingMode === 'user') {
@@ -250,30 +265,47 @@
     function capturePhoto() {
       if (!cameraStream) return;
 
-      const width = videoEl.videoWidth;
-      const height = videoEl.videoHeight;
+      const videoWidth = videoEl.videoWidth;
+      const videoHeight = videoEl.videoHeight;
 
-      canvasEl.width = width;
-      canvasEl.height = height;
+      // Limit resolution to a maximum of 1920px on the longest edge
+      const maxDimension = 1920;
+      let targetWidth = videoWidth;
+      let targetHeight = videoHeight;
+
+      if (videoWidth > maxDimension || videoHeight > maxDimension) {
+        if (videoWidth > videoHeight) {
+          targetHeight = Math.round((videoHeight * maxDimension) / videoWidth);
+          targetWidth = maxDimension;
+        } else {
+          targetWidth = Math.round((videoWidth * maxDimension) / videoHeight);
+          targetHeight = maxDimension;
+        }
+      }
+
+      canvasEl.width = targetWidth;
+      canvasEl.height = targetHeight;
 
       const ctx = canvasEl.getContext('2d');
 
       // If mirrored (front-facing), mirror the canvas render too
       if (cameraFacingMode === 'user') {
-        ctx.translate(width, 0);
+        ctx.translate(targetWidth, 0);
         ctx.scale(-1, 1);
       }
 
-      ctx.drawImage(videoEl, 0, 0, width, height);
+      ctx.drawImage(videoEl, 0, 0, targetWidth, targetHeight);
 
       // Reset transform if altered
       ctx.setTransform(1, 0, 0, 1, 0, 0);
 
-      // Convert to JPEG format with balanced quality/size compression
-      capturedImageBase64 = canvasEl.toDataURL('image/jpeg', 0.90);
+      // Convert to JPEG format with 88% quality to guarantee file size of 800KB - 1MB
+      capturedImageBase64 = canvasEl.toDataURL('image/jpeg', 0.88);
 
-      // Show in preview modal
+      // Show in preview modal and match the image aspect ratio dynamically
       previewImg.src = capturedImageBase64;
+      const previewContainer = document.querySelector('.preview-image-container');
+      previewContainer.style.aspectRatio = `${targetWidth} / ${targetHeight}`;
       previewModal.classList.add('active');
 
       // Keep background camera running or pause it
